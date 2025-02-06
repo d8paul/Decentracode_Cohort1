@@ -7,4 +7,4 @@ Deploy this smart contract on the Lisk sepolia and Create this DAPP to talk to y
 *** An HTML DApp (Decentralized Application) is a web application that interacts with a blockchain via smart contracts. Unlike traditional web apps, a DApp does not rely on a centralized backend but instead communicates with a blockchain network through smart contracts and APIs. It typically consists of:
 Frontend (HTML, CSS, JavaScript)
 Smart Contract (Blockchain logic)
-Web3 API (Connects frontend to blockchain)
+Web3 API (Connects frontend to blockchain)***
