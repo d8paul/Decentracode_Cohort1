@@ -1,0 +1,115 @@
+<html lang="en">
+<head>
+    <style>
+        body {
+            text-align: center;
+            font-family: sans-serif;
+        }
+
+        div {
+            width: 20%;
+            margin:0 auto;
+            display: flex;
+            flex-direction: column;
+        }
+
+        button {
+            width: 100%;
+            margin: 10px 0 5px 0;
+        }
+    </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cohort First DAPP</title>
+</head>
+<body>
+    <script>
+        // declaring variables
+        var getMyData;
+        var setMyData;
+        </script>
+
+    <script type="module">
+      //  Setting Up a Wallet Client
+      import {
+        createWalletClient,
+        custom,
+        getContract,
+      } from "https://esm.sh/viem";
+      import {sepolia } from "https://esm.sh/viem/chains";
+
+     //   Creating an account to connect user's wallet to Ethereum Sep0lia Testnet
+      const WalletClient = createWalletClient({
+        chain: sepolia,
+        transport: custom(window.ethereum),
+      });
+      
+    //   Making the wallet address show up  as a pop up
+    const accounts = await WalletClient.requestAddresses();
+
+    //get the first address in the array
+    const [address] = accounts;
+
+    //Accessing the Data contract address.
+    const DataContractAddress = "0x6f1ebd33Cc00029dB1C6A57550bf18542580995e"
+    const DataContractAbi = [
+                                {
+                                "inputs": [
+                                {
+                                    "internalType": "string",
+                                    "name": "_data",
+                                    "type": "string"
+                                }
+                                ],
+                                "name": "setData",
+                                "outputs": [],
+                                "stateMutability": "nonpayable",
+                                "type": "function"
+                                },
+                                {
+                                "inputs": [],
+                                "name": "getData",
+                                "outputs": [
+                                {
+                                    "internalType": "string",
+                                    "name": "",
+                                    "type": "string"
+                                }
+                                ],
+                                "stateMutability": "view",
+                                "type": "function"
+                                }
+                            ];
+
+    const DataContractInstance = getContract({
+        address: DataContractAddress,
+        abi: DataContractAbi,
+        client: WalletClient,
+    });
+
+    getMyData = async function() {
+        const data = await DataContractInstance.read.getData();
+        document.getElementById("showData").innerText = `Your Data is : ${data}`;
+    }
+
+    setMyData = async function() {
+        const data =document.getElementById("data").value;
+        await DataContractInstance.write.setData([data], {account:address});
+    }
+
+    </script>
+    <div>
+
+        <h1>Cohort First DAPP</h1>
+        <p>Lets set and Get Data from the blockchain.</p>
+        <label for="data">Input Data</label>
+        <input type="text" id="data" name="data">
+        <button onclick="getMyData()">Get Data</button>
+        <button onclick="setMyData()">Set Data</button>
+        <p id="showData"></p>
+    </div>
+   
+</body>
+
+
+</html>
